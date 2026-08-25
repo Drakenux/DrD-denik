@@ -633,14 +633,143 @@
       font-weight: 600;
     }
 
+  
+    .top-bottom-actions {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .top-bottom-actions #saveStatus {
+      text-align: center;
+      font-size: 12px;
+      opacity: .75;
+    }
+    .vital-action {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .vital-action button {
+      padding: 7px 10px;
+    }
+
+  
+    .vital-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .vital-restore-btn {
+      margin-left: 4px;
+      padding: 5px 9px;
+      font-size: 12px;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+
+  
+    .compact-topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 18px;
+    }
+    .compact-identity {
+      grid-template-columns: minmax(150px, 220px) minmax(190px, 280px);
+      justify-content: start;
+      gap: 12px;
+    }
+    .compact-identity input {
+      min-height: 34px;
+      padding: 6px 8px;
+    }
+    .compact-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 1px;
+    }
+    .compact-save-status {
+      margin-top: 4px;
+      font-size: 11px;
+      opacity: .7;
+    }
+
+    @media (max-width: 720px) {
+      .compact-topbar {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .compact-identity {
+        grid-template-columns: 1fr 1fr;
+      }
+      .compact-actions {
+        justify-content: flex-end;
+      }
+    }
+
+  
+    .compact-topbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 320px) 1fr;
+      align-items: start;
+      gap: 18px;
+    }
+
+    .compact-identity {
+      display: grid;
+      grid-template-columns: 1fr !important;
+      gap: 8px;
+      justify-content: start;
+    }
+
+    .compact-identity input {
+      width: 100%;
+      min-height: 34px;
+      padding: 6px 8px;
+    }
+
+    .compact-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-start;
+      gap: 8px;
+      padding-bottom: 0;
+    }
+
+    .compact-actions button {
+      min-width: 160px;
+    }
+
+    @media (max-width: 720px) {
+      .compact-topbar {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+      }
+
+      .compact-identity {
+        grid-template-columns: 1fr !important;
+      }
+
+      .compact-actions {
+        align-items: flex-end;
+      }
+    }
+
   </style>
 </head>
 <body>
   <div class="app">
     <div class="toolbar">
       <div class="card">
-        <div class="toolbar-head">
-          <div class="identity-grid">
+        <div class="compact-topbar">
+          <div class="identity-grid compact-identity">
             <div>
               <label for="jmenoTop">Jméno</label>
               <input id="jmenoTop" type="text" />
@@ -650,14 +779,13 @@
               <input id="rasaTop" type="text" />
             </div>
           </div>
-          <div class="toolbar-actions">
-            <button id="restoreBtn">Obnovit na maximum</button>
+          <div class="compact-actions">
             <button id="printBtn">Export do PDF / tisk</button>
+            <button class="secondary" id="resetBtn">Vymazat vše</button>
           </div>
         </div>
-        <div class="save-note">
+        <div class="compact-save-status">
           <span id="saveStatus">Ještě neuloženo</span>
-          <button class="secondary" id="resetBtn">Vymazat vše</button>
         </div>
       </div>
 
@@ -665,7 +793,7 @@
         <div class="card status-box">
           <div class="head">
             <div>
-              <div class="vital-title-row"><span class="vital-icon heart" aria-hidden="true">♥</span><div class="title">Životy</div></div>
+              <div class="vital-title-row"><span class="vital-icon heart" aria-hidden="true">♥</span><div class="title">Životy</div><button class="vital-restore-btn" id="restoreHealthBtn">Obnovit na max</button></div>
               <div class="caption">Aktuální stav / maximum</div>
             </div>
             <div class="badge" id="zivotyBadge">20 / 20</div>
@@ -683,13 +811,14 @@
           <div style="margin-top:10px">
             <input id="zivotySlider" type="range" min="0" max="20" value="20" />
           </div>
+          
           <div id="zivotyStatus" class="status-msg status-normal">Stav je v bezpečném rozmezí.</div>
         </div>
 
         <div class="card status-box">
           <div class="head">
             <div>
-              <div class="vital-title-row"><span class="vital-icon star" aria-hidden="true">✦</span><div class="title">Magy</div></div>
+              <div class="vital-title-row"><span class="vital-icon star" aria-hidden="true">✦</span><div class="title">Magy</div><button class="vital-restore-btn" id="restoreManaBtn">Obnovit na max</button></div>
               <div class="caption">Aktuální stav / maximum</div>
             </div>
             <div class="badge" id="magyBadge">12 / 12</div>
@@ -707,6 +836,7 @@
           <div style="margin-top:10px">
             <input id="magySlider" type="range" min="0" max="12" value="12" />
           </div>
+          
           <div id="magyStatus" class="status-msg status-normal">Stav je v bezpečném rozmezí.</div>
         </div>
       </div>
@@ -1329,8 +1459,13 @@
     }
 
     function bindActions() {
-      document.getElementById('restoreBtn').addEventListener('click', () => {
+      document.getElementById('restoreHealthBtn').addEventListener('click', () => {
         data.aktualniZivoty = data.maxZivoty;
+        syncVitals();
+        scheduleSave();
+      });
+
+      document.getElementById('restoreManaBtn').addEventListener('click', () => {
         data.aktualniMagy = data.maxMagy;
         syncVitals();
         scheduleSave();
