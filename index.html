@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Osobní deník – Dračí doupě</title>
+  <meta name="theme-color" content="#d9d0bf" />
+  <style>
+    :root {
+      --paper: #f8f5ee;
+      --paper-2: #ede6d8;
+      --ink: #171717;
+      --line: #2b2b2b;
+      --muted: #666;
+      --ok-bg: #ecfdf5;
+      --ok-bd: #86efac;
+      --ok-tx: #166534;
+      --warn-bg: #fffbeb;
+      --warn-bd: #fcd34d;
+      --warn-tx: #92400e;
+      --danger-bg: #fef2f2;
+      --danger-bd: #fca5a5;
+      --danger-tx: #b91c1c;
+      --shadow: 0 12px 30px rgba(0,0,0,.12);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #ede9df 0%, #e6e0d4 100%);
+    }
+    .app {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .toolbar-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+    }
+    .identity-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      align-self: end;
+    }
+    .card {
+      background: rgba(255,255,255,.84);
+      border: 2px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    h1 {
+      font-size: 34px;
+      margin: 0 0 6px 0;
+      letter-spacing: .03em;
+    }
+    .sub { color: var(--muted); font-size: 14px; }
+    .row { display: grid; gap: 12px; }
+    .row.two { grid-template-columns: 1fr 1fr; }
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    button, .tab {
+      border: 2px solid var(--line);
+      background: #fff;
+      border-radius: 16px;
+      padding: 10px 14px;
+      font: inherit;
+      cursor: pointer;
+    }
+    button.secondary { background: transparent; }
+    button:hover, .tab:hover { filter: brightness(.98); }
+    label {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-family: system-ui, sans-serif;
+    }
+    input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      border: 1.7px solid var(--line);
+      background: rgba(255,255,255,.96);
+      font: 14px/1.2 system-ui, sans-serif;
+      color: var(--ink);
+      padding: 8px 10px;
+      border-radius: 0;
+      min-height: 36px;
+    }
+    textarea { min-height: 240px; resize: vertical; }
+    .save-note {
+      margin-top: 10px;
+      font: 14px/1.3 system-ui, sans-serif;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .badge {
+      border: 1.7px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: white;
+      font: 14px system-ui, sans-serif;
+      white-space: nowrap;
+    }
+    .status-box .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .status-box .title {
+      font: 600 16px system-ui, sans-serif;
+      margin-bottom: 2px;
+    }
+    .status-box .caption { color: var(--muted); font: 12px system-ui, sans-serif; }
+    .status-msg {
+      margin-top: 12px;
+      border: 1.7px solid;
+      border-radius: 16px;
+      padding: 10px 12px;
+      font: 14px system-ui, sans-serif;
+    }
+    .status-normal { background: var(--ok-bg); border-color: var(--ok-bd); color: var(--ok-tx); }
+    .status-warning { background: var(--warn-bg); border-color: var(--warn-bd); color: var(--warn-tx); }
+    .status-danger { background: var(--danger-bg); border-color: var(--danger-bd); color: var(--danger-tx); }
+    input[type="range"] { width: 100%; }
+    #zivotySlider { accent-color: #dc2626; }
+    #magySlider { accent-color: #2563eb; }
+    .vital-title-row { display: flex; align-items: center; gap: 8px; }
+    .vital-icon { display: inline-flex; width: 22px; justify-content: center; font-size: 22px; line-height: 1; }
+    .vital-icon.heart { color: #dc2626; }
+    .vital-icon.star { color: #2563eb; }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .tab.active { background: var(--ink); color: white; }
+
+    .page {
+      background: var(--paper);
+      border: 2px solid var(--line);
+      border-radius: 28px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+.crest {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .crest-box {
+      width: 140px;
+      height: 180px;
+      border: 2px solid var(--line);
+      background: rgba(255,255,255,.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+    }
+.frame { border: 2px solid var(--line); background: rgba(255,255,255,.4); }
+    .frame > .cell, .frame .split > div { padding: 8px; }
+    .cell + .cell { border-top: 2px solid var(--line); }
+    .split { display: grid; grid-template-columns: 1fr 1fr; }
+    .split > div + div { border-left: 2px solid var(--line); }
+
+    .page1-main {
+      display: grid;
+      grid-template-columns: 1.05fr 1.3fr;
+      gap: 16px;
+      margin-top: 0;
+      align-items: start;
+    }
+    .boxed { border: 2px solid var(--line); }
+    .grid3 { display: grid; grid-template-columns: 1.6fr .65fr .65fr; }
+    .grid3 > div { padding: 8px; }
+    .grid3 > div:not(:nth-child(3n)) { border-right: 2px solid var(--line); }
+    .grid3 .r { border-bottom: 2px solid var(--line); }
+    .stat-head { font-size: 28px; }
+    .line-header {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .etable { border: 2px solid var(--line); overflow: hidden; }
+    .etable-grid { display: grid; }
+    .etable-grid > div {
+      padding: 4px;
+      border-right: 2px solid var(--line);
+      min-width: 0;
+    }
+    .etable-grid > div:last-child { border-right: 0; }
+    .etable-head { background: rgba(255,255,255,.6); font: 12px system-ui, sans-serif; }
+    .etable-row { border-top: 2px solid var(--line); }
+    .etable-row input { min-height: 30px; padding: 6px; font-size: 12px; }
+
+    .abilities {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .lines-head { border-bottom: 2px solid var(--line); background: rgba(255,255,255,.5); padding: 6px; font: 12px system-ui, sans-serif; }
+    .ability-head, .ability-row { display: grid; grid-template-columns: 1fr 1fr; }
+    .ability-head { border-bottom: 2px solid var(--line); background: rgba(255,255,255,.5); font: 12px system-ui, sans-serif; }
+    .ability-head > div, .ability-row > div { padding: 4px; min-width: 0; }
+    .ability-head > div:first-child, .ability-row > div:first-child,
+    .ability-head > div:nth-child(2), .ability-row > div:nth-child(2) { border-right: 2px solid var(--line); }
+    .ability-row { border-top: 2px solid var(--line); }
+    .ability-row:first-of-type { border-top: 0; }
+    .ability-row input { min-height: 30px; padding: 6px; font-size: 12px; }
+
+    .section-title { font-size: 28px; margin: 0 0 8px 0; }
+    .page2-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 18px;
+    }
+    .stack { margin-top: 18px; }
+    .radio-box { border: 2px solid var(--line); max-width: 290px; }
+    .radio-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px;
+      border-top: 2px solid var(--line);
+      font-size: 28px;
+    }
+    .radio-row:first-child { border-top: 0; }
+    .simple-grid { border: 2px solid var(--line); max-width: 280px; }
+    .simple-row {
+      display: grid;
+      grid-template-columns: 1.6fr .8fr;
+      border-top: 2px solid var(--line);
+    }
+    .simple-row:first-child { border-top: 0; }
+    .simple-row > div { padding: 8px; }
+    .simple-row > div:first-child { border-right: 2px solid var(--line); font-size: 28px; }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 900px) {
+      .toolbar, .page1-main, .abilities, .page2-grid, .row.two, .status-grid, .identity-grid, .toolbar-head { grid-template-columns: 1fr; }
+      .toolbar-actions { justify-content: flex-start; }
+.section-title, .radio-row, .simple-row > div:first-child, .stat-head { font-size: 22px; }
+      .app { padding: 12px; }
+    }
+
+    
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+
+      html, body {
+        width: 100%;
+        background: white !important;
+      }
+
+      body {
+        margin: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .toolbar,
+      .tabs,
+      .print-hidden {
+        display: none !important;
+      }
+
+      .app {
+        max-width: none !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .page {
+        width: 100% !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        margin: 0 0 8mm 0 !important;
+        padding: 7mm !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .page-1 {
+        display: block !important;
+      }
+
+      .page-2 {
+        display: block !important;
+        break-before: page;
+        page-break-before: always;
+      }
+
+      .page1-main,
+      .page1-main-natural {
+        display: grid !important;
+        grid-template-columns: 1.05fr 1.3fr !important;
+        gap: 10mm !important;
+        align-items: start !important;
+      }
+
+      .abilities {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6mm !important;
+      }
+
+      .page2-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8mm !important;
+      }
+
+      .etable,
+      .boxed,
+      .abilities > *,
+      .page1-main > *,
+      .page2-grid > * {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .page,
+      .page-1,
+      .page-2,
+      .boxed,
+      .etable,
+      .etable-head,
+      .ability-head,
+      .stat-column-head,
+      input,
+      textarea {
+        background: white !important;
+        background-image: none !important;
+        color: #000 !important;
+      }
+
+
+
+      /* Odstranění 42px akčního sloupce při tisku. */
+      .removable-grid > .remove-cell,
+      .removable-grid > .print-hidden:last-child {
+        display: none !important;
+      }
+
+            /* Tisk: skrýt nejen tlačítka, ale i celý jejich sloupec. */
+      .remove-cell,
+      .etable-head > .print-hidden:last-child,
+      .ability-head > .print-hidden:last-child {
+        display: none !important;
+      }
+
+      .ability-head,
+      .ability-row {
+        grid-template-columns: 1fr 1fr !important;
+      }
+
+
+      /* Pevné tiskové šablony bez posledního 42px akčního sloupce. */
+      #bojTable .etable-grid {
+        grid-template-columns: 2fr .7fr .85fr .45fr .45fr !important;
+      }
+
+      #strelbaTable .etable-grid {
+        grid-template-columns: 1.5fr .8fr .45fr .45fr .5fr .5fr .5fr !important;
+      }
+
+      #zbrojTable .etable-grid,
+      #stitTable .etable-grid {
+        grid-template-columns: 1.4fr 1fr !important;
+      }
+
+      #vybaveniTable .etable-grid,
+      #pokladTable .etable-grid {
+        grid-template-columns: 1.5fr 1.1fr .75fr !important;
+      }
+
+      /* Akční buňky v tisku vůbec nevykreslovat. */
+      #bojTable .remove-cell,
+      #strelbaTable .remove-cell,
+      #zbrojTable .remove-cell,
+      #stitTable .remove-cell,
+      #vybaveniTable .remove-cell,
+      #pokladTable .remove-cell,
+      #bojTable .etable-head > .print-hidden:last-child,
+      #strelbaTable .etable-head > .print-hidden:last-child,
+      #zbrojTable .etable-head > .print-hidden:last-child,
+      #stitTable .etable-head > .print-hidden:last-child,
+      #vybaveniTable .etable-head > .print-hidden:last-child,
+      #pokladTable .etable-head > .print-hidden:last-child {
+        display: none !important;
+      }
+
+
+      /* Automaticky počítaná pole mají při tisku bílé pozadí. */
+      .computed-field,
+      #bojTable input[readonly],
+      #strelbaTable input[readonly],
+      #obranneCislo {
+        background: #fff !important;
+        background-color: #fff !important;
+        background-image: none !important;
+        color: #000 !important;
+      }
+
+
+      /* Sjednotit tloušťku rámečků dynamických tabulek při tisku. */
+      #bojTable,
+      #strelbaTable,
+      #zbrojTable,
+      #stitTable {
+        border: 2px solid var(--line) !important;
+      }
+
+      #bojTable .etable-grid,
+      #strelbaTable .etable-grid,
+      #zbrojTable .etable-grid,
+      #stitTable .etable-grid {
+        border-left: 0 !important;
+        border-right: 0 !important;
+      }
+
+      #bojTable .etable-grid:first-child,
+      #strelbaTable .etable-grid:first-child,
+      #zbrojTable .etable-grid:first-child,
+      #stitTable .etable-grid:first-child {
+        border-top: 0 !important;
+      }
+
+      #bojTable .etable-grid:last-child,
+      #strelbaTable .etable-grid:last-child,
+      #zbrojTable .etable-grid:last-child,
+      #stitTable .etable-grid:last-child {
+        border-bottom: 0 !important;
+      }
+
+
+      /* Tisk: pravé dynamické tabulky mají jemnější, jednotné linky. */
+      #bojTable,
+      #strelbaTable,
+      #zbrojTable,
+      #stitTable {
+        border-width: 1px !important;
+      }
+
+      #bojTable .etable-grid > div,
+      #strelbaTable .etable-grid > div,
+      #zbrojTable .etable-grid > div,
+      #stitTable .etable-grid > div {
+        border-right-width: 1px !important;
+      }
+
+      #bojTable .etable-row,
+      #strelbaTable .etable-row,
+      #zbrojTable .etable-row,
+      #stitTable .etable-row {
+        border-top-width: 1px !important;
+      }
+
+      #bojTable .etable-head,
+      #strelbaTable .etable-head,
+      #zbrojTable .etable-head,
+      #stitTable .etable-head {
+        border-bottom-width: 0 !important;
+      }
+
+
+      /* Tisk: sjednotit tenké linky i u schopností, vybavení a pokladu. */
+      #zvlastni1Box,
+      #zvlastni2Box,
+      #vybaveniTable,
+      #pokladTable {
+        border-width: 1px !important;
+      }
+
+      #zvlastni1Box .ability-head > div,
+      #zvlastni1Box .ability-row > div,
+      #zvlastni2Box .ability-head > div,
+      #zvlastni2Box .ability-row > div,
+      #vybaveniTable .etable-grid > div,
+      #pokladTable .etable-grid > div {
+        border-right-width: 1px !important;
+      }
+
+      #zvlastni1Box .ability-head,
+      #zvlastni2Box .ability-head {
+        border-bottom-width: 1px !important;
+      }
+
+      #zvlastni1Box .ability-row,
+      #zvlastni2Box .ability-row,
+      #vybaveniTable .etable-row,
+      #pokladTable .etable-row {
+        border-top-width: 1px !important;
+      }
+
+      button {
+        display: none !important;
+      }
+    }
+
+    @media print and (orientation: portrait) {
+      .page-1,
+      .page-2 {
+        font-size: 10pt;
+      }
+
+      .line-header,
+      .section-title {
+        font-size: 17pt !important;
+      }
+
+      .etable-row input,
+      .ability-row input,
+      input[type="text"],
+      input[type="number"] {
+        min-height: 24px !important;
+        padding: 4px 5px !important;
+        font-size: 9pt !important;
+      }
+
+      .grid3 > div {
+        padding: 5px !important;
+      }
+
+      .abilities {
+        margin-top: 5mm !important;
+      }
+    }
+
+  
+    .add-row-btn {
+      width: 30px; height: 30px; padding: 0; border: 1px solid #15803d;
+      background: #f0fdf4; color: #15803d; border-radius: 7px; cursor: pointer;
+      font: 700 18px/1 system-ui, sans-serif;
+    }
+    .add-row-btn:hover { background: #dcfce7; }
+    .remove-row-btn {
+      width: 30px; height: 30px; padding: 0; border: 1px solid #9f1239;
+      background: #fff1f2; color: #9f1239; border-radius: 7px; cursor: pointer;
+      font: 700 18px/1 system-ui, sans-serif;
+    }
+    .remove-row-btn:hover { background: #ffe4e6; }
+    .remove-cell { display:flex; align-items:center; justify-content:center; }
+    .count-control { display:grid; grid-template-columns:28px minmax(38px,1fr) 28px; gap:4px; align-items:center; }
+    .count-control input { text-align:center; min-width:0; }
+    .count-btn { width:28px; height:28px; padding:0; border:1px solid #52525b; background:#fafafa; color:#18181b; border-radius:6px; cursor:pointer; font:700 17px/1 system-ui,sans-serif; }
+    .count-btn:hover { background:#e4e4e7; }
+    @media (max-width: 520px) { .count-control { grid-template-columns:25px minmax(32px,1fr) 25px; gap:2px; } .count-btn { width:25px; height:25px; } }
+  
+    .page1-main-natural {
+      align-items: start;
+    }
+
+  
+    .ability-head, .ability-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .ability-head > div, .ability-row > div {
+      padding: 4px;
+    }
+    .ability-head > div:first-child, .ability-row > div:first-child {
+      border-right: 2px solid #27272a;
+    }
+    .ability-head {
+      border-bottom: 2px solid #27272a;
+      background: rgba(255,255,255,.5);
+      font-size: 12px;
+    }
+
+
+    .stat-column-head {
+      border-bottom: 2px solid var(--line);
+      font: 12px system-ui, sans-serif;
+      background: rgba(255,255,255,.5);
+    }
+    .stat-column-head > div {
+      padding: 6px 8px;
+      text-align: center;
+    }
+
+  
+    .computed-field {
+      background: #f1f1f1 !important;
+      color: #3f3f46;
+      font-weight: 600;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="toolbar">
+      <div class="card">
+        <div class="toolbar-head">
+          <div class="identity-grid">
+            <div>
+              <label for="jmenoTop">Jméno</label>
+              <input id="jmenoTop" type="text" />
+            </div>
+            <div>
+              <label for="rasaTop">Rasa a povolání</label>
+              <input id="rasaTop" type="text" />
+            </div>
+          </div>
+          <div class="toolbar-actions">
+            <button id="restoreBtn">Obnovit na maximum</button>
+            <button id="printBtn">Export do PDF / tisk</button>
+          </div>
+        </div>
+        <div class="save-note">
+          <span id="saveStatus">Ještě neuloženo</span>
+          <button class="secondary" id="resetBtn">Vymazat vše</button>
+        </div>
+      </div>
+
+      <div class="status-grid">
+        <div class="card status-box">
+          <div class="head">
+            <div>
+              <div class="vital-title-row"><span class="vital-icon heart" aria-hidden="true">♥</span><div class="title">Životy</div></div>
+              <div class="caption">Aktuální stav / maximum</div>
+            </div>
+            <div class="badge" id="zivotyBadge">20 / 20</div>
+          </div>
+          <div class="row two">
+            <div>
+              <label for="maxZivoty">Maximum</label>
+              <input id="maxZivoty" type="number" min="0" />
+            </div>
+            <div>
+              <label for="aktualniZivoty">Aktuální hodnota</label>
+              <input id="aktualniZivoty" type="number" min="0" />
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <input id="zivotySlider" type="range" min="0" max="20" value="20" />
+          </div>
+          <div id="zivotyStatus" class="status-msg status-normal">Stav je v bezpečném rozmezí.</div>
+        </div>
+
+        <div class="card status-box">
+          <div class="head">
+            <div>
+              <div class="vital-title-row"><span class="vital-icon star" aria-hidden="true">✦</span><div class="title">Magy</div></div>
+              <div class="caption">Aktuální stav / maximum</div>
+            </div>
+            <div class="badge" id="magyBadge">12 / 12</div>
+          </div>
+          <div class="row two">
+            <div>
+              <label for="maxMagy">Maximum</label>
+              <input id="maxMagy" type="number" min="0" />
+            </div>
+            <div>
+              <label for="aktualniMagy">Aktuální hodnota</label>
+              <input id="aktualniMagy" type="number" min="0" />
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <input id="magySlider" type="range" min="0" max="12" value="12" />
+          </div>
+          <div id="magyStatus" class="status-msg status-normal">Stav je v bezpečném rozmezí.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-page="1">Strana 1</button>
+      <button class="tab" data-page="2">Strana 2</button>
+      <button class="tab" data-page="all">Obě strany</button>
+    </div>
+
+    <section class="page page-1">
+<div class="page1-main page1-main-natural">
+        <div>
+          <div class="line-header">vlastnosti</div>
+          <div class="boxed">
+            <div class="grid3 stat-column-head">
+            <div></div>
+            <div>hodnota</div>
+            <div>modifikátor</div>
+          </div>
+          <div class="grid3" id="statTable"></div>
+          <div class="grid3" style="border-top:2px solid var(--line)">
+            <div style="font-size:26px">postřeh: obj.</div>
+            <div>
+              <div style="font:12px system-ui,sans-serif;text-align:center;margin-bottom:4px">náhodný</div>
+              <input id="postrehNahodny" type="text" />
+            </div>
+            <div>
+              <div style="font:12px system-ui,sans-serif;text-align:center;margin-bottom:4px">hledání</div>
+              <input id="postrehHledani" type="text" />
+            </div>
+          </div>
+          <div class="grid3" style="border-top:2px solid var(--line)">
+            <div style="font-size:22px">mech.</div>
+            <div><input id="postrehObj" type="text" /></div>
+            <div><input id="postrehMech" type="text" /></div>
+          </div>
+          </div>
+          <div class="stack simple-grid exp-level-box" id="xpBox" style="margin-top:16px"></div>
+        </div>
+
+        <div>
+          <div class="line-header">útočné číslo – boj tváří v tvář</div>
+          <div id="bojTable"></div>
+
+          <div class="line-header" style="margin-top:16px">útočné číslo – střelecký souboj</div>
+          <div id="strelbaTable"></div>
+
+          <div style="margin-top:16px">
+            <div class="section-title" style="font-size:24px">obranné číslo</div>
+            <div style="max-width:160px;border:2px solid var(--line);padding:4px">
+              <input id="obranneCislo" type="text" readonly class="computed-field" />
+            </div>
+
+            <div style="margin-top:16px;max-width:420px">
+              <div id="zbrojTable"></div>
+              <div id="stitTable" style="margin-top:12px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="abilities">
+        <div class="etable" id="zvlastni1Box"></div>
+        <div class="etable" id="zvlastni2Box"></div>
+      </div>
+    </section>
+
+    <section class="page page-2 hidden">
+      <div class="etable">
+        <div class="lines-head">poznámky</div>
+        <textarea id="poznamky"></textarea>
+      </div>
+
+      <div class="page2-grid">
+        <div>
+          <div class="section-title">vybavení</div>
+          <div id="vybaveniTable"></div>
+
+          
+
+
+        </div>
+
+        <div>
+          <div class="section-title">poklad</div>
+          <div id="pokladTable"></div>
+
+          <div class="etable" style="border-top:0">
+            <div id="pokladTotals"></div>
+          </div>
+
+          
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'drd-denik-mobile-v1';
+
+    const defaultRows = (count, shape) => Array.from({ length: count }, () => ({ ...shape }));
+    const defaultLines = (count) => Array.from({ length: count }, () => '');
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+    const initialData = {
+      jmeno: '',
+      rasaPovolani: '',
+      maxZivoty: 20,
+      maxMagy: 12,
+      aktualniZivoty: 20,
+      aktualniMagy: 12,
+      vlastnosti: {
+        sila: { stupen: '', oprava: '' },
+        obratnost: { stupen: '', oprava: '' },
+        odolnost: { stupen: '', oprava: '' },
+        inteligence: { stupen: '', oprava: '' },
+        charisma: { stupen: '', oprava: '' },
+        velikost: { stupen: '', oprava: '' },
+      },
+      postrehNahodny: '', postrehHledani: '', postrehObj: '', postrehMech: '',
+      utocneCisloBoj: defaultRows(4, { zbran: '', kde: '', uc: '', utoc: '', oz: '' }),
+      utocneCisloStrelba: defaultRows(4, { zbran: '', silaZbrane: '', uc: '', utoc: '', maly: '', stred: '', velky: '' }),
+      obranneCislo: '',
+      zbroj: defaultRows(4, { zbroj: '', sila: '' }),
+      stit: defaultRows(2, { stit: '', sila: '' }),
+      zvlastni1: Array.from({ length: 9 }, () => ({ nazev: '', poznamka: '' })), zvlastni2: Array.from({ length: 9 }, () => ({ nazev: '', poznamka: '' })),
+      poznamky: '',
+      vybaveni: defaultRows(14, { vec: '', kde: '', vaha: '' }),
+      zakladniNaklad: '', celkovyNaklad: '', nalozeni: 'zadne',
+      poklad: defaultRows(12, { vec: '', kde: '', vaha: '' }),
+      zlataky: '', stribrnaky: '', medaky: '', pokladCelkem: '', zkusenost: '', uroven: ''
+    };
+
+    let data = load();
+    let saveTimer = null;
+
+    const statDefs = [
+      ['síla', 'sila'], ['obratnost', 'obratnost'], ['odolnost', 'odolnost'], ['inteligence', 'inteligence'],
+      ['charisma', 'charisma'], ['velikost', 'velikost']
+    ];
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return structuredClone(initialData);
+        const parsed = JSON.parse(raw);
+        return {
+          ...structuredClone(initialData),
+          ...parsed,
+          vlastnosti: { ...structuredClone(initialData).vlastnosti, ...(parsed.vlastnosti || {}) }
+        };
+      } catch {
+        return structuredClone(initialData);
+      }
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      const now = new Date();
+      document.getElementById('saveStatus').textContent = `Uloženo ${now.toLocaleTimeString('cs-CZ')}`;
+    }
+
+    function scheduleSave() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(save, 200);
+    }
+
+    function statusType(current, max) {
+      if (!max) return 'normal';
+      const r = current / max;
+      if (r <= 0.25) return 'danger';
+      if (r <= 0.5) return 'warning';
+      return 'normal';
+    }
+
+    function statusText(type) {
+      if (type === 'danger') return 'Nízký stav — zvýrazněno červeně.';
+      if (type === 'warning') return 'Pozor, jsi pod polovinou.';
+      return 'Stav je v bezpečném rozmezí.';
+    }
+
+    function bindText(ids, key) {
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = data[key] || '';
+        el.addEventListener('input', () => {
+          data[key] = el.value;
+          ids.forEach(otherId => {
+            if (otherId === id) return;
+            const other = document.getElementById(otherId);
+            if (other) other.value = el.value;
+          });
+          scheduleSave();
+        });
+      });
+    }
+
+    function syncVitals() {
+      data.maxZivoty = Math.max(0, Number(data.maxZivoty) || 0);
+      data.maxMagy = Math.max(0, Number(data.maxMagy) || 0);
+      data.aktualniZivoty = clamp(Number(data.aktualniZivoty) || 0, 0, data.maxZivoty);
+      data.aktualniMagy = clamp(Number(data.aktualniMagy) || 0, 0, data.maxMagy);
+
+      const zType = statusType(data.aktualniZivoty, data.maxZivoty);
+      const mType = statusType(data.aktualniMagy, data.maxMagy);
+
+      document.getElementById('maxZivoty').value = data.maxZivoty;
+      document.getElementById('aktualniZivoty').value = data.aktualniZivoty;
+      document.getElementById('zivotySlider').max = data.maxZivoty;
+      document.getElementById('zivotySlider').value = data.aktualniZivoty;
+      document.getElementById('zivotyBadge').textContent = `${data.aktualniZivoty} / ${data.maxZivoty}`;
+      const zEl = document.getElementById('zivotyStatus');
+      zEl.className = `status-msg status-${zType}`;
+      zEl.textContent = statusText(zType);
+
+      document.getElementById('maxMagy').value = data.maxMagy;
+      document.getElementById('aktualniMagy').value = data.aktualniMagy;
+      document.getElementById('magySlider').max = data.maxMagy;
+      document.getElementById('magySlider').value = data.aktualniMagy;
+      document.getElementById('magyBadge').textContent = `${data.aktualniMagy} / ${data.maxMagy}`;
+      const mEl = document.getElementById('magyStatus');
+      mEl.className = `status-msg status-${mType}`;
+      mEl.textContent = statusText(mType);
+    }
+
+
+    function parseSignedNumber(value) {
+      if (value === null || value === undefined) return 0;
+      const cleaned = String(value).trim().replace(/\s+/g, '');
+      const n = Number(cleaned);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function formatSigned(value) {
+      const n = Number(value);
+      if (!Number.isFinite(n)) return '';
+      if (n > 0) return `+${n}`;
+      return String(n);
+    }
+
+    function parseWeaponStrength(value) {
+      const raw = String(value ?? '').trim();
+      if (!raw) return { base: null, attack: null };
+      const parts = raw.split('/');
+      const base = parseSignedNumber(parts[0]);
+      const attack = parts.length > 1 ? parseSignedNumber(parts[1]) : 0;
+      return { base, attack };
+    }
+
+    function getStatModifier(statKey) {
+      return parseSignedNumber(data.vlastnosti?.[statKey]?.oprava ?? '');
+    }
+
+
+    function recalcDefense() {
+      const dexMod = getStatModifier('obratnost');
+      const armor = (data.zbroj || []).reduce((sum, row) => sum + parseSignedNumber(row.sila), 0);
+      const shield = (data.stit || []).reduce((sum, row) => sum + parseSignedNumber(row.sila), 0);
+      const total = dexMod + armor + shield;
+      data.obranneCislo = String(total);
+      const el = document.getElementById('obranneCislo');
+      if (el) el.value = data.obranneCislo;
+    }
+
+    function recalcCombatTables() {
+      const strengthMod = getStatModifier('sila');
+      const dexMod = getStatModifier('obratnost');
+
+      data.utocneCisloBoj.forEach((row, i) => {
+        const { base, attack } = parseWeaponStrength(row.oz);
+        if (base === null) {
+          row.uc = '';
+          row.utoc = '';
+        } else {
+          row.uc = String(base + strengthMod);
+          row.utoc = formatSigned(attack);
+        }
+        const ucEl = document.getElementById(`bojTable-${i}-uc`);
+        const utEl = document.getElementById(`bojTable-${i}-utoc`);
+        if (ucEl) ucEl.value = row.uc;
+        if (utEl) utEl.value = row.utoc;
+      });
+
+      data.utocneCisloStrelba.forEach((row, i) => {
+        const { base, attack } = parseWeaponStrength(row.silaZbrane);
+        if (base === null) {
+          row.uc = '';
+          row.utoc = '';
+        } else {
+          row.uc = String(base + dexMod);
+          row.utoc = formatSigned(attack);
+        }
+        const ucEl = document.getElementById(`strelbaTable-${i}-uc`);
+        const utEl = document.getElementById(`strelbaTable-${i}-utoc`);
+        if (ucEl) ucEl.value = row.uc;
+        if (utEl) utEl.value = row.utoc;
+      });
+    }
+
+
+    function calculateStatModifier(value) {
+      const n = Number(String(value ?? '').trim().replace(',', '.'));
+      if (!Number.isFinite(n)) return '';
+      if (n === 1) return '-5';
+      if (n >= 2 && n <= 3) return '-4';
+      if (n >= 4 && n <= 5) return '-3';
+      if (n >= 6 && n <= 7) return '-2';
+      if (n >= 8 && n <= 9) return '-1';
+      if (n >= 10 && n <= 12) return '0';
+      if (n >= 13 && n <= 14) return '+1';
+      if (n >= 15 && n <= 16) return '+2';
+      if (n >= 17 && n <= 18) return '+3';
+      if (n >= 19 && n <= 20) return '+4';
+      if (n === 21) return '+5';
+      return '';
+    }
+
+    function renderStatTable() {
+      const host = document.getElementById('statTable');
+      host.innerHTML = '';
+      statDefs.forEach(([label, key], idx) => {
+        const isLast = idx === statDefs.length - 1;
+        host.insertAdjacentHTML('beforeend', `
+          <div class="${isLast ? '' : 'r'}" style="font-size:22px">${label}</div>
+          <div class="${isLast ? '' : 'r'}"><input id="stat-${key}-stupen" type="text"></div>
+          <div class="${isLast ? '' : 'r'}"><input id="stat-${key}-oprava" type="text" readonly class="computed-field"></div>
+        `);
+      });
+      statDefs.forEach(([, key]) => {
+        const a = document.getElementById(`stat-${key}-stupen`);
+        const b = document.getElementById(`stat-${key}-oprava`);
+        a.value = data.vlastnosti[key].stupen || '';
+        const autoModifier = calculateStatModifier(data.vlastnosti[key].stupen);
+        data.vlastnosti[key].oprava = autoModifier;
+        b.value = autoModifier;
+
+        a.addEventListener('input', () => {
+          data.vlastnosti[key].stupen = a.value;
+          const modifier = calculateStatModifier(a.value);
+          data.vlastnosti[key].oprava = modifier;
+          b.value = modifier;
+          recalcCombatTables();
+          recalcDefense();
+          scheduleSave();
+        });
+      });
+    }
+
+    function renderTable(hostId, columns, rows, storeKey, gridTemplate) {
+      const host = document.getElementById(hostId);
+      const removable = [
+        'vybaveni', 'poklad',
+        'utocneCisloBoj', 'utocneCisloStrelba',
+        'zbroj', 'stit'
+      ].includes(storeKey);
+      const effectiveGrid = removable ? `${gridTemplate} 42px` : gridTemplate;
+      const printGrid = gridTemplate;
+      host.className = 'etable';
+      const headCells = columns.map(c => `<div>${c.label}</div>`).join('');
+      const removeHead = removable ? '<div class="print-hidden" aria-label="Akce"></div>' : '';
+      const head = `<div class="etable-grid etable-head${removable ? ' removable-grid' : ''}" style="grid-template-columns:${effectiveGrid}"${removable ? ` data-print-grid="${printGrid}"` : ''}>${headCells}${removeHead}</div>`;
+      const body = rows.map((row, i) => {
+        const removeCell = removable
+          ? `<div class="remove-cell print-hidden"><button type="button" class="remove-row-btn" data-remove-row="${i}" title="Odstranit řádek" aria-label="Odstranit řádek ${i + 1}">−</button></div>`
+          : '';
+        return `
+          <div class="etable-grid etable-row${removable ? ' removable-grid' : ''}" style="grid-template-columns:${effectiveGrid}"${removable ? ` data-print-grid="${printGrid}"` : ''}>
+            ${columns.map(c => {
+              if (removable && c.key === 'vaha') {
+                return `<div><div class="count-control"><button type="button" class="count-btn print-hidden" data-count-minus="${i}" aria-label="Snížit počet">−</button><input id="${hostId}-${i}-${c.key}" type="number" min="0" inputmode="numeric"><button type="button" class="count-btn print-hidden" data-count-plus="${i}" aria-label="Zvýšit počet">+</button></div></div>`;
+              }
+              const computed = (storeKey === 'utocneCisloBoj' || storeKey === 'utocneCisloStrelba') && (c.key === 'uc' || c.key === 'utoc');
+              return `<div><input id="${hostId}-${i}-${c.key}" type="text"${computed ? ' readonly class="computed-field"' : ''}></div>`;
+            }).join('')}
+            ${removeCell}
+          </div>`;
+      }).join('');
+      const addRow = removable
+        ? `<div class="etable-grid etable-row print-hidden removable-grid" style="grid-template-columns:${effectiveGrid}" data-print-grid="${printGrid}">
+             <div style="grid-column:1 / -2;border-right:2px solid var(--line);min-height:38px"></div>
+             <div class="remove-cell"><button type="button" class="add-row-btn" data-add-row title="Přidat řádek" aria-label="Přidat řádek">+</button></div>
+           </div>`
+        : '';
+      host.innerHTML = head + body + addRow;
+      rows.forEach((row, i) => {
+        columns.forEach(c => {
+          const el = document.getElementById(`${hostId}-${i}-${c.key}`);
+          el.value = row[c.key] || '';
+          el.addEventListener('input', () => {
+            data[storeKey][i][c.key] = el.value;
+            if (
+              (storeKey === 'utocneCisloBoj' && c.key === 'oz') ||
+              (storeKey === 'utocneCisloStrelba' && c.key === 'silaZbrane')
+            ) {
+              recalcCombatTables();
+      recalcDefense();
+            }
+            if ((storeKey === 'zbroj' || storeKey === 'stit') && c.key === 'sila') {
+              recalcDefense();
+            }
+            scheduleSave();
+          });
+        });
+      });
+      if (removable) {
+        host.querySelectorAll('[data-count-minus]').forEach(button => {
+          button.addEventListener('click', () => {
+            const i = Number(button.dataset.countMinus);
+            const el = document.getElementById(`${hostId}-${i}-vaha`);
+            const next = Math.max(0, (Number(el.value) || 0) - 1);
+            el.value = next;
+            data[storeKey][i].vaha = next;
+            scheduleSave();
+          });
+        });
+        host.querySelectorAll('[data-count-plus]').forEach(button => {
+          button.addEventListener('click', () => {
+            const i = Number(button.dataset.countPlus);
+            const el = document.getElementById(`${hostId}-${i}-vaha`);
+            const next = Math.max(0, (Number(el.value) || 0) + 1);
+            el.value = next;
+            data[storeKey][i].vaha = next;
+            scheduleSave();
+          });
+        });
+        host.querySelectorAll('[data-remove-row]').forEach(button => {
+          button.addEventListener('click', () => {
+            const index = Number(button.dataset.removeRow);
+            data[storeKey].splice(index, 1);
+            renderTable(hostId, columns, data[storeKey], storeKey, gridTemplate);
+            if (storeKey === 'utocneCisloBoj' || storeKey === 'utocneCisloStrelba') recalcCombatTables();
+            if (storeKey === 'zbroj' || storeKey === 'stit') recalcDefense();
+            scheduleSave();
+          });
+        });
+
+        const addButton = host.querySelector('[data-add-row]');
+        if (addButton) {
+          addButton.addEventListener('click', () => {
+            const emptyRow = Object.fromEntries(columns.map(c => [c.key, '']));
+            data[storeKey].push(emptyRow);
+            renderTable(hostId, columns, data[storeKey], storeKey, gridTemplate);
+            if (storeKey === 'utocneCisloBoj' || storeKey === 'utocneCisloStrelba') recalcCombatTables();
+            if (storeKey === 'zbroj' || storeKey === 'stit') recalcDefense();
+            scheduleSave();
+          });
+        }
+      }
+    }
+
+    function renderLinesBox(containerId, key, title) {
+      const box = document.getElementById(containerId);
+      box.innerHTML = '';
+
+      const head = document.createElement('div');
+      head.className = 'ability-head';
+      head.style.gridTemplateColumns = '1fr 1fr 42px';
+      head.innerHTML = `<div>${title}</div><div>poznámka</div><div class="print-hidden"></div>`;
+      box.appendChild(head);
+
+      data[key].forEach((item, idx) => {
+        const rowData = typeof item === 'string'
+          ? { nazev: item, poznamka: '' }
+          : { nazev: item?.nazev || '', poznamka: item?.poznamka || '' };
+
+        if (typeof data[key][idx] === 'string') data[key][idx] = rowData;
+
+        const row = document.createElement('div');
+        row.className = 'ability-row';
+        row.style.gridTemplateColumns = '1fr 1fr 42px';
+
+        const nameCell = document.createElement('div');
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.value = rowData.nazev;
+        nameInput.addEventListener('input', () => {
+          data[key][idx].nazev = nameInput.value;
+          scheduleSave();
+        });
+        nameCell.appendChild(nameInput);
+
+        const noteCell = document.createElement('div');
+        const noteInput = document.createElement('input');
+        noteInput.type = 'text';
+        noteInput.value = rowData.poznamka;
+        noteInput.addEventListener('input', () => {
+          data[key][idx].poznamka = noteInput.value;
+          scheduleSave();
+        });
+        noteCell.appendChild(noteInput);
+
+        const removeCell = document.createElement('div');
+        removeCell.className = 'remove-cell print-hidden';
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'remove-row-btn';
+        removeButton.textContent = '−';
+        removeButton.title = 'Odstranit řádek';
+        removeButton.setAttribute('aria-label', `Odstranit řádek ${idx + 1}`);
+        removeButton.addEventListener('click', () => {
+          data[key].splice(idx, 1);
+          renderLinesBox(containerId, key, title);
+          scheduleSave();
+        });
+        removeCell.appendChild(removeButton);
+
+        row.appendChild(nameCell);
+        row.appendChild(noteCell);
+        row.appendChild(removeCell);
+        box.appendChild(row);
+      });
+
+      const addRow = document.createElement('div');
+      addRow.className = 'ability-row print-hidden';
+      addRow.style.gridTemplateColumns = '1fr 1fr 42px';
+
+      const spacer1 = document.createElement('div');
+      const spacer2 = document.createElement('div');
+      const addCell = document.createElement('div');
+      addCell.className = 'remove-cell';
+
+      const addButton = document.createElement('button');
+      addButton.type = 'button';
+      addButton.className = 'add-row-btn';
+      addButton.textContent = '+';
+      addButton.title = 'Přidat řádek';
+      addButton.setAttribute('aria-label', 'Přidat řádek');
+      addButton.addEventListener('click', () => {
+        data[key].push({ nazev: '', poznamka: '' });
+        renderLinesBox(containerId, key, title);
+        scheduleSave();
+      });
+
+      addCell.appendChild(addButton);
+      addRow.appendChild(spacer1);
+      addRow.appendChild(spacer2);
+      addRow.appendChild(addCell);
+      box.appendChild(addRow);
+    }
+
+    function renderSimpleTotals() {
+      const pokladTotals = document.getElementById('pokladTotals');
+      const defs = [['zlaťáků', 'zlataky']];
+      pokladTotals.innerHTML = defs.map((d, idx) => `
+        <div class="etable-grid ${idx ? 'etable-row' : ''}" style="grid-template-columns:1.5fr 1.95fr">
+          <div style="font-size:28px;border-right:2px solid var(--line)">${d[0]}</div>
+          <div><input id="${d[1]}" type="text"></div>
+        </div>`).join('');
+      defs.forEach(([, key]) => {
+        const el = document.getElementById(key);
+        el.value = data[key] || '';
+        el.addEventListener('input', () => { data[key] = el.value; scheduleSave(); });
+      });
+
+      const xpBox = document.getElementById('xpBox');
+      const xpDefs = [['zkušenost', 'zkusenost'], ['úroveň', 'uroven']];
+      xpBox.innerHTML = xpDefs.map(([label, key]) => `
+        <div class="simple-row">
+          <div>${label}</div>
+          <div><input id="${key}" type="text"></div>
+        </div>`).join('');
+      xpDefs.forEach(([, key]) => {
+        const el = document.getElementById(key);
+        el.value = data[key] || '';
+        el.addEventListener('input', () => { data[key] = el.value; scheduleSave(); });
+      });
+    }
+
+    function bindBasicFields() {
+      bindText(['jmenoTop'], 'jmeno');
+      bindText(['rasaTop'], 'rasaPovolani');
+
+      ['postrehNahodny', 'postrehHledani', 'postrehObj', 'postrehMech', 'obranneCislo', 'poznamky'].forEach(key => {
+        const el = document.getElementById(key);
+        if (!el) return;
+        el.value = data[key] || '';
+        el.addEventListener('input', () => { data[key] = el.value; scheduleSave(); });
+      });
+
+    }
+
+    function bindVitals() {
+      const maxZ = document.getElementById('maxZivoty');
+      const curZ = document.getElementById('aktualniZivoty');
+      const sliderZ = document.getElementById('zivotySlider');
+      const maxM = document.getElementById('maxMagy');
+      const curM = document.getElementById('aktualniMagy');
+      const sliderM = document.getElementById('magySlider');
+
+      const setMaxZ = (v) => { data.maxZivoty = Math.max(0, Number(v) || 0); data.aktualniZivoty = clamp(data.aktualniZivoty, 0, data.maxZivoty); syncVitals(); scheduleSave(); };
+      const setCurZ = (v) => { data.aktualniZivoty = clamp(Number(v) || 0, 0, data.maxZivoty); syncVitals(); scheduleSave(); };
+      const setMaxM = (v) => { data.maxMagy = Math.max(0, Number(v) || 0); data.aktualniMagy = clamp(data.aktualniMagy, 0, data.maxMagy); syncVitals(); scheduleSave(); };
+      const setCurM = (v) => { data.aktualniMagy = clamp(Number(v) || 0, 0, data.maxMagy); syncVitals(); scheduleSave(); };
+
+      maxZ.addEventListener('input', () => setMaxZ(maxZ.value));
+      curZ.addEventListener('input', () => setCurZ(curZ.value));
+      sliderZ.addEventListener('input', () => setCurZ(sliderZ.value));
+
+      maxM.addEventListener('input', () => setMaxM(maxM.value));
+      curM.addEventListener('input', () => setCurM(curM.value));
+      sliderM.addEventListener('input', () => setCurM(sliderM.value));
+
+      syncVitals();
+    }
+
+    function bindTabs() {
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const page = tab.dataset.page;
+          document.querySelector('.page-1').classList.toggle('hidden', !(page === '1' || page === 'all'));
+          document.querySelector('.page-2').classList.toggle('hidden', !(page === '2' || page === 'all'));
+        });
+      });
+    }
+
+    function bindActions() {
+      document.getElementById('restoreBtn').addEventListener('click', () => {
+        data.aktualniZivoty = data.maxZivoty;
+        data.aktualniMagy = data.maxMagy;
+        syncVitals();
+        scheduleSave();
+      });
+
+      document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        if (!confirm('Opravdu vymazat všechna uložená data deníku?')) return;
+        localStorage.removeItem(STORAGE_KEY);
+        data = structuredClone(initialData);
+        init();
+        document.getElementById('saveStatus').textContent = 'Data byla vymazána';
+      });
+    }
+
+    function preparePrintLayout() {
+      document.querySelectorAll('.removable-grid[data-print-grid]').forEach(row => {
+        row.dataset.screenGridTemplate = row.style.gridTemplateColumns || '';
+        row.style.setProperty('grid-template-columns', row.dataset.printGrid, 'important');
+      });
+
+      document.querySelectorAll('.ability-head, .ability-row').forEach(row => {
+        row.dataset.screenGridTemplate = row.style.gridTemplateColumns || '';
+        row.style.setProperty('grid-template-columns', '1fr 1fr', 'important');
+      });
+    }
+
+    function restoreScreenLayout() {
+      document.querySelectorAll('[data-screen-grid-template]').forEach(row => {
+        row.style.removeProperty('grid-template-columns');
+        row.style.gridTemplateColumns = row.dataset.screenGridTemplate;
+        delete row.dataset.screenGridTemplate;
+      });
+    }
+
+    window.addEventListener('beforeprint', preparePrintLayout);
+    window.addEventListener('afterprint', restoreScreenLayout);
+
+    function init() {
+      renderStatTable();
+      renderTable('bojTable', [
+        { key: 'zbran', label: 'zbraň' },
+        { key: 'kde', label: 'kde' },
+        { key: 'oz', label: 'síla zbraně' },
+        { key: 'uc', label: 'ÚČ' },
+        { key: 'utoc', label: 'útoč.' }
+      ], data.utocneCisloBoj, 'utocneCisloBoj', '2fr .7fr .85fr .45fr .45fr');
+
+      renderTable('strelbaTable', [
+        { key: 'zbran', label: 'zbraň' },
+        { key: 'silaZbrane', label: 'síla zbraně' },
+        { key: 'uc', label: 'ÚČ' },
+        { key: 'utoc', label: 'útoč.' },
+        { key: 'maly', label: 'malý' },
+        { key: 'stred', label: 'střed.' },
+        { key: 'velky', label: 'velký' }
+      ], data.utocneCisloStrelba, 'utocneCisloStrelba', '1.5fr .8fr .45fr .45fr .5fr .5fr .5fr');
+
+      renderTable('zbrojTable', [
+        { key: 'zbroj', label: 'zbroj' },
+        { key: 'sila', label: 'síla zbroje' }
+      ], data.zbroj, 'zbroj', '1.4fr 1fr');
+
+      renderTable('stitTable', [
+        { key: 'stit', label: 'štít' },
+        { key: 'sila', label: 'síla štítu' }
+      ], data.stit, 'stit', '1.4fr 1fr');
+
+      renderLinesBox('zvlastni1Box', 'zvlastni1', 'zvláštní schopnosti, kouzla');
+      renderLinesBox('zvlastni2Box', 'zvlastni2', 'zvláštní schopnosti, kouzla');
+      renderTable('vybaveniTable', [
+        { key: 'vec', label: 'věc' },
+        { key: 'kde', label: 'poznámka' },
+        { key: 'vaha', label: 'počet' }
+      ], data.vybaveni, 'vybaveni', '1.5fr 1.1fr .75fr');
+      renderTable('pokladTable', [
+        { key: 'vec', label: 'věc' },
+        { key: 'kde', label: 'poznámka' },
+        { key: 'vaha', label: 'počet' }
+      ], data.poklad, 'poklad', '1.5fr 1.1fr .75fr');
+      renderSimpleTotals();
+      recalcCombatTables();
+      recalcDefense();
+      bindBasicFields();
+      bindVitals();
+      bindTabs();
+      bindActions();
+    }
+
+    init();
+  </script>
+</body>
+</html>
