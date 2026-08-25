@@ -776,6 +776,47 @@
       background: #f8d7da;
     }
 
+  
+    /* Tablet / iPad: zabránit překrývání +/- počtu s odebráním řádku. */
+    @media screen and (min-width: 700px) and (max-width: 1180px) {
+      #vybaveniTable .etable-grid,
+      #pokladTable .etable-grid {
+        grid-template-columns: minmax(150px, 1.5fr) minmax(130px, 1.1fr) minmax(112px, .85fr) 52px !important;
+      }
+
+      #vybaveniTable .qty,
+      #pokladTable .qty {
+        min-width: 0;
+        gap: 4px;
+      }
+
+      #vybaveniTable .qty button,
+      #pokladTable .qty button {
+        flex: 0 0 30px;
+        width: 30px;
+        min-width: 30px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      #vybaveniTable .qty input,
+      #pokladTable .qty input {
+        min-width: 38px;
+        width: 100%;
+        padding-left: 3px;
+        padding-right: 3px;
+        text-align: center;
+      }
+
+      #vybaveniTable .remove-cell,
+      #pokladTable .remove-cell {
+        min-width: 52px;
+        width: 52px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+    }
+
   </style>
 </head>
 <body>
