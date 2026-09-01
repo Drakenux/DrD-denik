@@ -408,12 +408,13 @@
       }
 
       #strelbaTable .etable-grid {
-        grid-template-columns: 1.5fr .8fr .45fr .45fr .5fr .5fr .5fr !important;
+        grid-template-columns: 1.6fr .7fr .8fr .8fr .45fr .45fr !important;
       }
 
       #zbrojTable .etable-grid,
-      #stitTable .etable-grid {
-        grid-template-columns: 1.4fr 1fr !important;
+      #stitTable .etable-grid,
+      #helmaTable .etable-grid {
+        grid-template-columns: 1fr 54px !important;
       }
 
       #vybaveniTable .etable-grid,
@@ -454,14 +455,16 @@
       #bojTable,
       #strelbaTable,
       #zbrojTable,
-      #stitTable {
+      #stitTable,
+      #helmaTable {
         border: 2px solid var(--line) !important;
       }
 
       #bojTable .etable-grid,
       #strelbaTable .etable-grid,
       #zbrojTable .etable-grid,
-      #stitTable .etable-grid {
+      #stitTable .etable-grid,
+      #helmaTable .etable-grid {
         border-left: 0 !important;
         border-right: 0 !important;
       }
@@ -485,28 +488,32 @@
       #bojTable,
       #strelbaTable,
       #zbrojTable,
-      #stitTable {
+      #stitTable,
+      #helmaTable {
         border-width: 1px !important;
       }
 
       #bojTable .etable-grid > div,
       #strelbaTable .etable-grid > div,
       #zbrojTable .etable-grid > div,
-      #stitTable .etable-grid > div {
+      #stitTable .etable-grid > div,
+      #helmaTable .etable-grid > div {
         border-right-width: 1px !important;
       }
 
       #bojTable .etable-row,
       #strelbaTable .etable-row,
       #zbrojTable .etable-row,
-      #stitTable .etable-row {
+      #stitTable .etable-row,
+      #helmaTable .etable-row {
         border-top-width: 1px !important;
       }
 
       #bojTable .etable-head,
       #strelbaTable .etable-head,
       #zbrojTable .etable-head,
-      #stitTable .etable-head {
+      #stitTable .etable-head,
+      #helmaTable .etable-head {
         border-bottom-width: 0 !important;
       }
 
@@ -538,6 +545,23 @@
       #vybaveniTable .etable-row,
       #pokladTable .etable-row {
         border-top-width: 1px !important;
+      }
+
+
+      .defense-section {
+        display: grid !important;
+        grid-template-columns: 105px 1fr !important;
+        gap: 5mm !important;
+        align-items: start !important;
+      }
+
+      .defense-number-box {
+        width: 82px !important;
+      }
+
+      .defense-equipment {
+        display: grid !important;
+        gap: 2mm !important;
       }
 
       button {
@@ -817,6 +841,363 @@
       }
     }
 
+  
+    .knockout-wrap {
+      display: grid;
+      grid-template-columns: auto 62px;
+      align-items: center;
+      gap: 6px;
+      margin-left: 2px;
+    }
+    .knockout-wrap label {
+      margin: 0;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .knockout-field {
+      width: 62px !important;
+      min-height: 28px !important;
+      padding: 4px 6px !important;
+      text-align: center;
+      font-weight: 700;
+    }
+
+  
+    .defense-section {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 145px minmax(250px, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .defense-number-box {
+      width: 105px;
+      border: 2px solid var(--line);
+      padding: 4px;
+    }
+
+    .defense-equipment {
+      display: grid;
+      gap: 8px;
+    }
+
+    #zbrojTable input[id$="-sila"],
+    #stitTable input[id$="-sila"],
+    #helmaTable input[id$="-sila"] {
+      text-align: center;
+      padding-left: 3px;
+      padding-right: 3px;
+    }
+
+    @media screen and (max-width: 720px) {
+      .defense-section {
+        grid-template-columns: 115px minmax(210px, 1fr);
+        gap: 10px;
+      }
+      .defense-number-box {
+        width: 90px;
+      }
+    }
+
+  
+    /* Víceřádkový text: schopnosti/kouzla, vybavení a poklad. */
+    #zvlastni1Box textarea,
+    #zvlastni2Box textarea,
+    #vybaveniTable textarea,
+    #pokladTable textarea {
+      width: 100%;
+      min-height: 34px;
+      height: 34px;
+      resize: none;
+      overflow: hidden;
+      box-sizing: border-box;
+      font: inherit;
+      line-height: 1.25;
+      padding: 6px 8px;
+      border: 1px solid #b8b8b8;
+      border-radius: 4px;
+      background: #fff;
+      color: inherit;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    @media print {
+      #zvlastni1Box textarea,
+      #zvlastni2Box textarea,
+      #vybaveniTable textarea,
+      #pokladTable textarea {
+        overflow: visible !important;
+        resize: none !important;
+        background: #fff !important;
+        color: #000 !important;
+      }
+    }
+
+  
+    .treasure-containers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .treasure-counter {
+      display: grid;
+      gap: 5px;
+    }
+
+    .treasure-counter-label {
+      font: 12px system-ui, sans-serif;
+      text-transform: lowercase;
+      color: var(--muted);
+    }
+
+    .treasure-counter .count-control {
+      grid-template-columns: 28px minmax(42px, 1fr) 28px;
+    }
+
+    .gold-row {
+      display: grid;
+      grid-template-columns: 1.2fr 2fr;
+      align-items: center;
+    }
+
+    .gold-label {
+      padding: 8px;
+      font-size: 28px;
+      border-right: 1px solid var(--line);
+    }
+
+    .gold-values {
+      display: grid;
+      grid-template-columns: minmax(55px, 1fr) auto minmax(55px, 1fr);
+      align-items: center;
+      gap: 7px;
+      padding: 6px 8px;
+    }
+
+    .gold-values input {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .gold-slash {
+      font: 700 24px/1 system-ui, sans-serif;
+    }
+
+    @media screen and (max-width: 700px) {
+      .treasure-containers {
+        grid-template-columns: 1fr;
+      }
+
+      .gold-label {
+        font-size: 22px;
+      }
+    }
+
+    @media print {
+      .treasure-containers {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 4mm !important;
+        background: #fff !important;
+      }
+
+      .gold-row,
+      .gold-values,
+      .gold-label {
+        background: #fff !important;
+      }
+
+      #zlatakyKapacita {
+        background: #fff !important;
+      }
+    }
+
+  
+    #zvlastni1Box .ability-row,
+    #zvlastni2Box .ability-row,
+    #vybaveniTable .etable-row,
+    #pokladTable .etable-row {
+      align-items: start;
+    }
+
+    #zvlastni1Box textarea,
+    #zvlastni2Box textarea,
+    #vybaveniTable textarea,
+    #pokladTable textarea {
+      display: block;
+      max-height: none;
+      overflow-y: hidden;
+    }
+
+  
+    #vybaveniTable .etable-row > div,
+    #pokladTable .etable-row > div {
+      align-self: stretch;
+    }
+
+    #vybaveniTable .count-control,
+    #pokladTable .count-control {
+      height: 100%;
+      min-height: 34px;
+      display: grid;
+      align-items: center;
+    }
+
+    #vybaveniTable .remove-cell,
+    #pokladTable .remove-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: stretch;
+    }
+
+  
+    .perception-head > div {
+      font: 12px system-ui, sans-serif;
+      text-align: center;
+      font-weight: 600;
+      padding: 7px 6px;
+    }
+
+    .perception-head > div:first-child {
+      text-align: left;
+      font-size: 18px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+    }
+
+    .perception-row > div:first-child {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .percent-input {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .percent-input input {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .percent-input span {
+      font: 600 14px system-ui, sans-serif;
+      padding-right: 3px;
+    }
+
+    @media print {
+      .percent-input span {
+        color: #000 !important;
+      }
+    }
+
+  
+    .print-only {
+      display: none;
+    }
+
+    @media print {
+      .print-only {
+        display: block !important;
+      }
+
+      .print-character-summary {
+        margin: 0 0 6mm 0;
+        padding: 4mm;
+        border: 1px solid var(--line);
+        background: #fff !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .print-identity-row,
+      .print-vitals-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 5mm !important;
+      }
+
+      .print-vitals-row {
+        margin-top: 3mm;
+      }
+
+      .print-field,
+      .print-vital-box {
+        min-width: 0;
+      }
+
+      .print-field-label,
+      .print-vital-title {
+        font: 700 9pt system-ui, sans-serif;
+        margin-bottom: 1mm;
+      }
+
+      .print-field-value,
+      .print-vital-box {
+        border: 1px solid var(--line);
+        padding: 2mm 2.5mm;
+        background: #fff !important;
+      }
+
+      .print-vital-title {
+        margin-bottom: 0.5mm;
+      }
+
+      .print-vital-values {
+        font: 700 14pt Georgia, "Times New Roman", serif;
+      }
+
+      .print-slash {
+        padding: 0 2mm;
+      }
+
+      .print-vital-extra {
+        margin-top: 1mm;
+        font: 8.5pt system-ui, sans-serif;
+      }
+    }
+
+  
+    @media print {
+      .print-vitals-compact {
+        display: flex !important;
+        align-items: center !important;
+        gap: 4mm !important;
+        margin-top: 2.5mm !important;
+        flex-wrap: nowrap !important;
+      }
+
+      .print-compact-item {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 2mm !important;
+        white-space: nowrap !important;
+      }
+
+      .print-compact-label {
+        font: 700 8.5pt system-ui, sans-serif;
+      }
+
+      .print-compact-value {
+        display: inline-block !important;
+        min-width: 12mm !important;
+        padding: 1mm 2mm !important;
+        border: 1px solid var(--line) !important;
+        text-align: center !important;
+        font: 700 10pt Georgia, "Times New Roman", serif;
+        background: #fff !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -848,19 +1229,27 @@
         <div class="card status-box">
           <div class="head">
             <div>
-              <div class="vital-title-row"><span class="vital-icon heart" aria-hidden="true">♥</span><div class="title">Životy</div><button class="vital-restore-btn" id="restoreHealthBtn">Obnovit na max</button></div>
+              <div class="vital-title-row">
+                <span class="vital-icon heart" aria-hidden="true">♥</span>
+                <div class="title">Životy</div>
+                <button class="vital-restore-btn" id="restoreHealthBtn">Obnovit na max</button>
+                <div class="knockout-wrap">
+                  <label for="mezVyrazeni">Mez vyřazení</label>
+                  <input id="mezVyrazeni" type="number" readonly class="computed-field knockout-field" />
+                </div>
+              </div>
               <div class="caption">Aktuální stav / maximum</div>
             </div>
             <div class="badge" id="zivotyBadge">20 / 20</div>
           </div>
           <div class="row two">
             <div>
-              <label for="maxZivoty">Maximum</label>
-              <input id="maxZivoty" type="number" min="0" />
-            </div>
-            <div>
               <label for="aktualniZivoty">Aktuální hodnota</label>
               <input id="aktualniZivoty" type="number" min="0" />
+            </div>
+            <div>
+              <label for="maxZivoty">Maximum</label>
+              <input id="maxZivoty" type="number" min="0" />
             </div>
           </div>
           <div style="margin-top:10px">
@@ -878,12 +1267,12 @@
           </div>
           <div class="row two">
             <div>
-              <label for="maxMagy">Maximum</label>
-              <input id="maxMagy" type="number" min="0" />
-            </div>
-            <div>
               <label for="aktualniMagy">Aktuální hodnota</label>
               <input id="aktualniMagy" type="number" min="0" />
+            </div>
+            <div>
+              <label for="maxMagy">Maximum</label>
+              <input id="maxMagy" type="number" min="0" />
             </div>
           </div>
           <div style="margin-top:10px">
@@ -899,6 +1288,35 @@
       <button class="tab" data-page="all">Obě strany</button>
     </div>
 
+
+    <section class="print-character-summary print-only">
+      <div class="print-identity-row">
+        <div class="print-field">
+          <div class="print-field-label">Jméno</div>
+          <div id="printJmeno" class="print-field-value"></div>
+        </div>
+        <div class="print-field">
+          <div class="print-field-label">Rasa a povolání</div>
+          <div id="printRasa" class="print-field-value"></div>
+        </div>
+      </div>
+
+      <div class="print-vitals-compact">
+        <div class="print-compact-item">
+          <span class="print-compact-label">Životy – maximum</span>
+          <span id="printMaxZivoty" class="print-compact-value"></span>
+        </div>
+        <div class="print-compact-item">
+          <span class="print-compact-label">Mez vyřazení</span>
+          <span id="printMezVyrazeni" class="print-compact-value"></span>
+        </div>
+        <div class="print-compact-item">
+          <span class="print-compact-label">Magy – maximum</span>
+          <span id="printMaxMagy" class="print-compact-value"></span>
+        </div>
+      </div>
+    </section>
+
     <section class="page page-1">
 <div class="page1-main page1-main-natural">
         <div>
@@ -910,21 +1328,40 @@
             <div>modifikátor</div>
           </div>
           <div class="grid3" id="statTable"></div>
-          <div class="grid3" style="border-top:2px solid var(--line)">
-            <div style="font-size:26px">postřeh: obj.</div>
+          <div class="grid3 perception-head" style="border-top:2px solid var(--line)">
+            <div>postřeh</div>
+            <div>náhodný</div>
+            <div>hledání</div>
+          </div>
+          <div class="grid3 perception-row" style="border-top:2px solid var(--line)">
+            <div>objekty</div>
             <div>
-              <div style="font:12px system-ui,sans-serif;text-align:center;margin-bottom:4px">náhodný</div>
-              <input id="postrehNahodny" type="text" />
+              <div class="percent-input">
+                <input id="postrehNahodny" type="number" inputmode="numeric" />
+                <span>%</span>
+              </div>
             </div>
             <div>
-              <div style="font:12px system-ui,sans-serif;text-align:center;margin-bottom:4px">hledání</div>
-              <input id="postrehHledani" type="text" />
+              <div class="percent-input">
+                <input id="postrehHledani" type="number" inputmode="numeric" />
+                <span>%</span>
+              </div>
             </div>
           </div>
-          <div class="grid3" style="border-top:2px solid var(--line)">
-            <div style="font-size:22px">mech.</div>
-            <div><input id="postrehObj" type="text" /></div>
-            <div><input id="postrehMech" type="text" /></div>
+          <div class="grid3 perception-row" style="border-top:2px solid var(--line)">
+            <div>mechanismy</div>
+            <div>
+              <div class="percent-input">
+                <input id="postrehObj" type="number" inputmode="numeric" />
+                <span>%</span>
+              </div>
+            </div>
+            <div>
+              <div class="percent-input">
+                <input id="postrehMech" type="number" inputmode="numeric" />
+                <span>%</span>
+              </div>
+            </div>
           </div>
           </div>
           <div class="stack simple-grid exp-level-box" id="xpBox" style="margin-top:16px"></div>
@@ -937,15 +1374,18 @@
           <div class="line-header" style="margin-top:16px">útočné číslo – střelecký souboj</div>
           <div id="strelbaTable"></div>
 
-          <div style="margin-top:16px">
-            <div class="section-title" style="font-size:24px">obranné číslo</div>
-            <div style="max-width:160px;border:2px solid var(--line);padding:4px">
-              <input id="obranneCislo" type="text" readonly class="computed-field" />
+          <div class="defense-section">
+            <div class="defense-number-block">
+              <div class="section-title" style="font-size:24px">obranné číslo</div>
+              <div class="defense-number-box">
+                <input id="obranneCislo" type="text" readonly class="computed-field" />
+              </div>
             </div>
 
-            <div style="margin-top:16px;max-width:420px">
+            <div class="defense-equipment">
               <div id="zbrojTable"></div>
-              <div id="stitTable" style="margin-top:12px"></div>
+              <div id="stitTable"></div>
+              <div id="helmaTable"></div>
             </div>
           </div>
         </div>
@@ -1011,16 +1451,17 @@
       },
       postrehNahodny: '', postrehHledani: '', postrehObj: '', postrehMech: '',
       utocneCisloBoj: defaultRows(4, { zbran: '', kde: '', uc: '', utoc: '', oz: '' }),
-      utocneCisloStrelba: defaultRows(4, { zbran: '', silaZbrane: '', uc: '', utoc: '', maly: '', stred: '', velky: '' }),
+      utocneCisloStrelba: defaultRows(4, { zbran: '', kde: '', silaZbrane: '', dostrel: '', uc: '', utoc: '' }),
       obranneCislo: '',
-      zbroj: defaultRows(4, { zbroj: '', sila: '' }),
-      stit: defaultRows(2, { stit: '', sila: '' }),
+      zbroj: defaultRows(1, { zbroj: '', sila: '' }),
+      stit: defaultRows(1, { stit: '', sila: '' }),
+      helma: defaultRows(1, { helma: '', sila: '' }),
       zvlastni1: Array.from({ length: 9 }, () => ({ nazev: '', poznamka: '' })), zvlastni2: Array.from({ length: 9 }, () => ({ nazev: '', poznamka: '' })),
       poznamky: '',
       vybaveni: defaultRows(14, { vec: '', kde: '', vaha: '' }),
       zakladniNaklad: '', celkovyNaklad: '', nalozeni: 'zadne',
       poklad: defaultRows(12, { vec: '', kde: '', vaha: '' }),
-      zlataky: '', stribrnaky: '', medaky: '', pokladCelkem: '', zkusenost: '', uroven: ''
+      mesce: 0, pokladnicky: 0, zlataky: '', stribrnaky: '', medaky: '', pokladCelkem: '', zkusenost: '', uroven: ''
     };
 
     let data = load();
@@ -1036,11 +1477,26 @@
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return structuredClone(initialData);
         const parsed = JSON.parse(raw);
-        return {
+        const merged = {
           ...structuredClone(initialData),
           ...parsed,
           vlastnosti: { ...structuredClone(initialData).vlastnosti, ...(parsed.vlastnosti || {}) }
         };
+
+        merged.zbroj = [((parsed.zbroj && parsed.zbroj[0]) || { zbroj: '', sila: '' })];
+        merged.stit = [((parsed.stit && parsed.stit[0]) || { stit: '', sila: '' })];
+        merged.helma = [((parsed.helma && parsed.helma[0]) || { helma: '', sila: '' })];
+
+        merged.utocneCisloStrelba = (parsed.utocneCisloStrelba || merged.utocneCisloStrelba || []).map(row => ({
+          zbran: row?.zbran || '',
+          kde: row?.kde || '',
+          silaZbrane: row?.silaZbrane || '',
+          dostrel: row?.dostrel || [row?.maly, row?.stred, row?.velky].filter(Boolean).join('/'),
+          uc: row?.uc || '',
+          utoc: row?.utoc || ''
+        }));
+
+        return merged;
       } catch {
         return structuredClone(initialData);
       }
@@ -1083,9 +1539,22 @@
             const other = document.getElementById(otherId);
             if (other) other.value = el.value;
           });
+          syncPrintSummary();
           scheduleSave();
         });
       });
+    }
+
+
+    function calculateKnockoutThreshold() {
+      const odolnost = Number(data.vlastnosti?.odolnost?.stupen || 0);
+      const max = Math.max(0, Number(data.maxZivoty) || 0);
+
+      if (odolnost >= 1 && odolnost <= 5) return Math.floor(max / 4);
+      if (odolnost >= 6 && odolnost <= 11) return Math.floor(max / 6);
+      if (odolnost >= 12 && odolnost <= 16) return Math.floor(max / 8);
+      if (odolnost >= 17 && odolnost <= 21) return 1;
+      return 0;
     }
 
     function syncVitals() {
@@ -1094,7 +1563,13 @@
       data.aktualniZivoty = clamp(Number(data.aktualniZivoty) || 0, 0, data.maxZivoty);
       data.aktualniMagy = clamp(Number(data.aktualniMagy) || 0, 0, data.maxMagy);
 
-      const zType = statusType(data.aktualniZivoty, data.maxZivoty);
+      const knockoutThreshold = calculateKnockoutThreshold();
+      const zType =
+        data.aktualniZivoty <= knockoutThreshold
+          ? 'danger'
+          : (data.maxZivoty > 0 && data.aktualniZivoty <= data.maxZivoty / 2)
+            ? 'warning'
+            : 'normal';
       const mType = statusType(data.aktualniMagy, data.maxMagy);
 
       document.getElementById('maxZivoty').value = data.maxZivoty;
@@ -1102,6 +1577,8 @@
       document.getElementById('zivotySlider').max = data.maxZivoty;
       document.getElementById('zivotySlider').value = data.aktualniZivoty;
       document.getElementById('zivotyBadge').textContent = `${data.aktualniZivoty} / ${data.maxZivoty}`;
+      const knockoutEl = document.getElementById('mezVyrazeni');
+      if (knockoutEl) knockoutEl.value = knockoutThreshold;
       const zCurrent = document.getElementById('aktualniZivoty');
       zCurrent.classList.remove('vital-normal', 'vital-warning', 'vital-danger');
       zCurrent.classList.add(`vital-${zType}`);
@@ -1114,6 +1591,8 @@
       const mCurrent = document.getElementById('aktualniMagy');
       mCurrent.classList.remove('vital-normal', 'vital-warning', 'vital-danger');
       mCurrent.classList.add(`vital-${mType}`);
+
+      syncPrintSummary();
     }
 
 
@@ -1147,9 +1626,10 @@
 
     function recalcDefense() {
       const dexMod = getStatModifier('obratnost');
-      const armor = (data.zbroj || []).reduce((sum, row) => sum + parseSignedNumber(row.sila), 0);
-      const shield = (data.stit || []).reduce((sum, row) => sum + parseSignedNumber(row.sila), 0);
-      const total = dexMod + armor + shield;
+      const armor = parseSignedNumber(data.zbroj?.[0]?.sila);
+      const shield = parseSignedNumber(data.stit?.[0]?.sila);
+      const helmet = parseSignedNumber(data.helma?.[0]?.sila);
+      const total = Math.max(0, dexMod + armor + shield + helmet);
       data.obranneCislo = String(total);
       const el = document.getElementById('obranneCislo');
       if (el) el.value = data.obranneCislo;
@@ -1165,7 +1645,7 @@
           row.uc = '';
           row.utoc = '';
         } else {
-          row.uc = String(base + strengthMod);
+          row.uc = String(Math.max(0, base + strengthMod));
           row.utoc = formatSigned(attack);
         }
         const ucEl = document.getElementById(`bojTable-${i}-uc`);
@@ -1180,7 +1660,7 @@
           row.uc = '';
           row.utoc = '';
         } else {
-          row.uc = String(base + dexMod);
+          row.uc = String(Math.max(0, base + dexMod));
           row.utoc = formatSigned(attack);
         }
         const ucEl = document.getElementById(`strelbaTable-${i}-uc`);
@@ -1204,7 +1684,12 @@
       if (n >= 15 && n <= 16) return '+2';
       if (n >= 17 && n <= 18) return '+3';
       if (n >= 19 && n <= 20) return '+4';
-      if (n === 21) return '+5';
+      if (n >= 21 && n <= 22) return '+5';
+      if (n >= 23 && n <= 24) return '+6';
+      if (n >= 25 && n <= 26) return '+7';
+      if (n >= 27 && n <= 28) return '+8';
+      if (n >= 29 && n <= 30) return '+9';
+      if (n === 31) return '+10';
       return '';
     }
 
@@ -1213,29 +1698,60 @@
       host.innerHTML = '';
       statDefs.forEach(([label, key], idx) => {
         const isLast = idx === statDefs.length - 1;
-        host.insertAdjacentHTML('beforeend', `
-          <div class="${isLast ? '' : 'r'}" style="font-size:22px">${label}</div>
-          <div class="${isLast ? '' : 'r'}"><input id="stat-${key}-stupen" type="text"></div>
-          <div class="${isLast ? '' : 'r'}"><input id="stat-${key}-oprava" type="text" readonly class="computed-field"></div>
-        `);
+        if (key === 'velikost') {
+          host.insertAdjacentHTML('beforeend', `
+            <div class="${isLast ? '' : 'r'}" style="font-size:22px">${label}</div>
+            <div class="${isLast ? '' : 'r'}"><input id="stat-${key}-stupen" type="text" maxlength="1" inputmode="text" autocomplete="off"></div>
+            <div class="${isLast ? '' : 'r'}"><input id="stat-${key}-oprava" type="number" min="0" step="1" inputmode="numeric"></div>
+          `);
+        } else {
+          host.insertAdjacentHTML('beforeend', `
+            <div class="${isLast ? '' : 'r'}" style="font-size:22px">${label}</div>
+            <div class="${isLast ? '' : 'r'}"><input id="stat-${key}-stupen" type="text"></div>
+            <div class="${isLast ? '' : 'r'}"><input id="stat-${key}-oprava" type="text" readonly class="computed-field"></div>
+          `);
+        }
       });
       statDefs.forEach(([, key]) => {
         const a = document.getElementById(`stat-${key}-stupen`);
         const b = document.getElementById(`stat-${key}-oprava`);
-        a.value = data.vlastnosti[key].stupen || '';
-        const autoModifier = calculateStatModifier(data.vlastnosti[key].stupen);
-        data.vlastnosti[key].oprava = autoModifier;
-        b.value = autoModifier;
+        if (key === 'velikost') {
+          const sizeValue = String(data.vlastnosti[key].stupen || '').toUpperCase();
+          a.value = /^[ABCDE]$/.test(sizeValue) ? sizeValue : '';
 
-        a.addEventListener('input', () => {
-          data.vlastnosti[key].stupen = a.value;
-          const modifier = calculateStatModifier(a.value);
-          data.vlastnosti[key].oprava = modifier;
-          b.value = modifier;
-          recalcCombatTables();
-          recalcDefense();
-          scheduleSave();
-        });
+          const heightValue = String(data.vlastnosti[key].oprava || '').replace(/\D/g, '');
+          b.value = heightValue;
+
+          a.addEventListener('input', () => {
+            const normalized = a.value.toUpperCase().replace(/[^ABCDE]/g, '').slice(0, 1);
+            a.value = normalized;
+            data.vlastnosti[key].stupen = normalized;
+            scheduleSave();
+          });
+
+          b.addEventListener('input', () => {
+            const numeric = String(b.value).replace(/\D/g, '');
+            b.value = numeric;
+            data.vlastnosti[key].oprava = numeric;
+            scheduleSave();
+          });
+        } else {
+          a.value = data.vlastnosti[key].stupen || '';
+          const autoModifier = calculateStatModifier(data.vlastnosti[key].stupen);
+          data.vlastnosti[key].oprava = autoModifier;
+          b.value = autoModifier;
+
+          a.addEventListener('input', () => {
+            data.vlastnosti[key].stupen = a.value;
+            const modifier = calculateStatModifier(a.value);
+            data.vlastnosti[key].oprava = modifier;
+            b.value = modifier;
+            recalcCombatTables();
+            recalcDefense();
+            if (key === 'odolnost') syncVitals();
+            scheduleSave();
+          });
+        }
       });
     }
 
@@ -1243,8 +1759,7 @@
       const host = document.getElementById(hostId);
       const removable = [
         'vybaveni', 'poklad',
-        'utocneCisloBoj', 'utocneCisloStrelba',
-        'zbroj', 'stit'
+        'utocneCisloBoj', 'utocneCisloStrelba'
       ].includes(storeKey);
       const effectiveGrid = removable ? `${gridTemplate} 42px` : gridTemplate;
       const printGrid = gridTemplate;
@@ -1263,6 +1778,10 @@
                 return `<div><div class="count-control"><button type="button" class="count-btn print-hidden" data-count-minus="${i}" aria-label="Snížit počet">−</button><input id="${hostId}-${i}-${c.key}" type="number" min="0" inputmode="numeric"><button type="button" class="count-btn print-hidden" data-count-plus="${i}" aria-label="Zvýšit počet">+</button></div></div>`;
               }
               const computed = (storeKey === 'utocneCisloBoj' || storeKey === 'utocneCisloStrelba') && (c.key === 'uc' || c.key === 'utoc');
+              const multiline = (storeKey === 'vybaveni' || storeKey === 'poklad');
+              if (multiline) {
+                return `<div><textarea id="${hostId}-${i}-${c.key}" rows="1"></textarea></div>`;
+              }
               return `<div><input id="${hostId}-${i}-${c.key}" type="text"${computed ? ' readonly class="computed-field"' : ''}></div>`;
             }).join('')}
             ${removeCell}
@@ -1279,8 +1798,10 @@
         columns.forEach(c => {
           const el = document.getElementById(`${hostId}-${i}-${c.key}`);
           el.value = row[c.key] || '';
+          if (el.tagName === 'TEXTAREA') requestAnimationFrame(() => autoGrowTextarea(el));
           el.addEventListener('input', () => {
             data[storeKey][i][c.key] = el.value;
+            if (el.tagName === 'TEXTAREA') autoGrowTextarea(el);
             if (
               (storeKey === 'utocneCisloBoj' && c.key === 'oz') ||
               (storeKey === 'utocneCisloStrelba' && c.key === 'silaZbrane')
@@ -1288,7 +1809,7 @@
               recalcCombatTables();
       recalcDefense();
             }
-            if ((storeKey === 'zbroj' || storeKey === 'stit') && c.key === 'sila') {
+            if ((storeKey === 'zbroj' || storeKey === 'stit' || storeKey === 'helma') && c.key === 'sila') {
               recalcDefense();
             }
             scheduleSave();
@@ -1322,7 +1843,7 @@
             data[storeKey].splice(index, 1);
             renderTable(hostId, columns, data[storeKey], storeKey, gridTemplate);
             if (storeKey === 'utocneCisloBoj' || storeKey === 'utocneCisloStrelba') recalcCombatTables();
-            if (storeKey === 'zbroj' || storeKey === 'stit') recalcDefense();
+            if (storeKey === 'zbroj' || storeKey === 'stit' || storeKey === 'helma') recalcDefense();
             scheduleSave();
           });
         });
@@ -1334,7 +1855,7 @@
             data[storeKey].push(emptyRow);
             renderTable(hostId, columns, data[storeKey], storeKey, gridTemplate);
             if (storeKey === 'utocneCisloBoj' || storeKey === 'utocneCisloStrelba') recalcCombatTables();
-            if (storeKey === 'zbroj' || storeKey === 'stit') recalcDefense();
+            if (storeKey === 'zbroj' || storeKey === 'stit' || storeKey === 'helma') recalcDefense();
             scheduleSave();
           });
         }
@@ -1363,21 +1884,25 @@
         row.style.gridTemplateColumns = '1fr 1fr 42px';
 
         const nameCell = document.createElement('div');
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
+        const nameInput = document.createElement('textarea');
+        nameInput.rows = 1;
         nameInput.value = rowData.nazev;
         nameInput.addEventListener('input', () => {
           data[key][idx].nazev = nameInput.value;
+          autoGrowTextarea(nameInput);
+          autoGrowTextarea(noteInput);
           scheduleSave();
         });
         nameCell.appendChild(nameInput);
 
         const noteCell = document.createElement('div');
-        const noteInput = document.createElement('input');
-        noteInput.type = 'text';
+        const noteInput = document.createElement('textarea');
+        noteInput.rows = 1;
         noteInput.value = rowData.poznamka;
         noteInput.addEventListener('input', () => {
           data[key][idx].poznamka = noteInput.value;
+          autoGrowTextarea(noteInput);
+          autoGrowTextarea(nameInput);
           scheduleSave();
         });
         noteCell.appendChild(noteInput);
@@ -1401,6 +1926,10 @@
         row.appendChild(noteCell);
         row.appendChild(removeCell);
         box.appendChild(row);
+        requestAnimationFrame(() => {
+          autoGrowTextarea(nameInput);
+          autoGrowTextarea(noteInput);
+        });
       });
 
       const addRow = document.createElement('div');
@@ -1431,18 +1960,104 @@
       box.appendChild(addRow);
     }
 
+    function treasureCapacity() {
+      const pouches = Math.max(0, Number(data.mesce) || 0);
+      const chests = Math.max(0, Number(data.pokladnicky) || 0);
+      return (pouches * 100) + (chests * 500);
+    }
+
     function renderSimpleTotals() {
       const pokladTotals = document.getElementById('pokladTotals');
-      const defs = [['zlaťáků', 'zlataky']];
-      pokladTotals.innerHTML = defs.map((d, idx) => `
-        <div class="etable-grid ${idx ? 'etable-row' : ''}" style="grid-template-columns:1.5fr 1.95fr">
-          <div style="font-size:28px;border-right:2px solid var(--line)">${d[0]}</div>
-          <div><input id="${d[1]}" type="text"></div>
-        </div>`).join('');
-      defs.forEach(([, key]) => {
-        const el = document.getElementById(key);
-        el.value = data[key] || '';
-        el.addEventListener('input', () => { data[key] = el.value; scheduleSave(); });
+      pokladTotals.innerHTML = `
+        <div class="treasure-containers">
+          <div class="treasure-counter">
+            <div class="treasure-counter-label">měšce</div>
+            <div class="count-control">
+              <button type="button" class="count-btn print-hidden" id="mesceMinus" aria-label="Odebrat měšec">−</button>
+              <input id="mesce" type="number" min="0" inputmode="numeric">
+              <button type="button" class="count-btn print-hidden" id="mescePlus" aria-label="Přidat měšec">+</button>
+            </div>
+          </div>
+          <div class="treasure-counter">
+            <div class="treasure-counter-label">pokladničky</div>
+            <div class="count-control">
+              <button type="button" class="count-btn print-hidden" id="pokladnickyMinus" aria-label="Odebrat pokladničku">−</button>
+              <input id="pokladnicky" type="number" min="0" inputmode="numeric">
+              <button type="button" class="count-btn print-hidden" id="pokladnickyPlus" aria-label="Přidat pokladničku">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="gold-row">
+          <div class="gold-label">zlaťáky</div>
+          <div class="gold-values">
+            <input id="zlataky" type="number" min="0" inputmode="numeric" aria-label="Aktuální počet zlaťáků">
+            <span class="gold-slash">/</span>
+            <input id="zlatakyKapacita" type="number" readonly class="computed-field" aria-label="Kapacita zlaťáků">
+          </div>
+        </div>
+      `;
+
+      const mesce = document.getElementById('mesce');
+      const pokladnicky = document.getElementById('pokladnicky');
+      const zlataky = document.getElementById('zlataky');
+      const kapacita = document.getElementById('zlatakyKapacita');
+
+      function syncTreasureCapacity() {
+        data.mesce = Math.max(0, Number(mesce.value) || 0);
+        data.pokladnicky = Math.max(0, Number(pokladnicky.value) || 0);
+        mesce.value = data.mesce;
+        pokladnicky.value = data.pokladnicky;
+
+        const capacity = treasureCapacity();
+        kapacita.value = capacity;
+
+        const currentGold = Math.max(0, Number(zlataky.value) || 0);
+        if (currentGold > capacity) {
+          zlataky.value = capacity;
+          data.zlataky = String(capacity);
+        }
+
+        zlataky.max = capacity;
+        scheduleSave();
+      }
+
+      mesce.value = Math.max(0, Number(data.mesce) || 0);
+      pokladnicky.value = Math.max(0, Number(data.pokladnicky) || 0);
+      const initialCapacity = treasureCapacity();
+      const initialGold = Math.min(Math.max(0, Number(data.zlataky) || 0), initialCapacity);
+      zlataky.value = initialGold;
+      zlataky.max = initialCapacity;
+      data.zlataky = String(initialGold);
+      kapacita.value = initialCapacity;
+
+      mesce.addEventListener('input', syncTreasureCapacity);
+      pokladnicky.addEventListener('input', syncTreasureCapacity);
+      zlataky.addEventListener('input', () => {
+        const capacity = treasureCapacity();
+        let value = Math.max(0, Number(zlataky.value) || 0);
+        value = Math.min(value, capacity);
+        zlataky.value = value;
+        zlataky.max = capacity;
+        data.zlataky = String(value);
+        scheduleSave();
+      });
+
+      document.getElementById('mesceMinus').addEventListener('click', () => {
+        mesce.value = Math.max(0, (Number(mesce.value) || 0) - 1);
+        syncTreasureCapacity();
+      });
+      document.getElementById('mescePlus').addEventListener('click', () => {
+        mesce.value = (Number(mesce.value) || 0) + 1;
+        syncTreasureCapacity();
+      });
+      document.getElementById('pokladnickyMinus').addEventListener('click', () => {
+        pokladnicky.value = Math.max(0, (Number(pokladnicky.value) || 0) - 1);
+        syncTreasureCapacity();
+      });
+      document.getElementById('pokladnickyPlus').addEventListener('click', () => {
+        pokladnicky.value = (Number(pokladnicky.value) || 0) + 1;
+        syncTreasureCapacity();
       });
 
       const xpBox = document.getElementById('xpBox');
@@ -1470,6 +2085,20 @@
         el.addEventListener('input', () => { data[key] = el.value; scheduleSave(); });
       });
 
+    }
+
+
+    function syncPrintSummary() {
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value ?? '';
+      };
+
+      setText('printJmeno', data.jmeno || '');
+      setText('printRasa', data.rasaPovolani || '');
+      setText('printMaxZivoty', data.maxZivoty ?? 0);
+      setText('printMezVyrazeni', calculateKnockoutThreshold());
+      setText('printMaxMagy', data.maxMagy ?? 0);
     }
 
     function bindVitals() {
@@ -1528,7 +2157,20 @@
         if (!confirm('Opravdu vymazat všechna uložená data deníku?')) return;
         localStorage.removeItem(STORAGE_KEY);
         data = structuredClone(initialData);
-        init();
+    
+    const wrappingObserver = new MutationObserver(() => {
+      requestAnimationFrame(refreshWrappingFields);
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      ['zvlastni1Box', 'zvlastni2Box', 'vybaveniTable', 'pokladTable'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) wrappingObserver.observe(el, { childList: true, subtree: true });
+      });
+      refreshWrappingFields();
+    });
+
+    init();
         document.getElementById('saveStatus').textContent = 'Data byla vymazána';
       });
     }
@@ -1556,6 +2198,49 @@
     window.addEventListener('beforeprint', preparePrintLayout);
     window.addEventListener('afterprint', restoreScreenLayout);
 
+
+
+    function syncMultilineRow(row) {
+      if (!row) return;
+      const fields = Array.from(row.querySelectorAll('textarea'));
+      if (!fields.length) return;
+
+      fields.forEach(el => {
+        el.style.height = '0px';
+      });
+
+      const target = Math.max(
+        34,
+        ...fields.map(el => el.scrollHeight)
+      );
+
+      fields.forEach(el => {
+        el.style.height = target + 'px';
+      });
+    }
+
+    function autoGrowTextarea(el) {
+      if (!el) return;
+      const row = el.closest('.ability-row, .etable-row');
+      if (row) {
+        syncMultilineRow(row);
+        return;
+      }
+      el.style.height = '0px';
+      const nextHeight = Math.max(34, el.scrollHeight);
+      el.style.height = nextHeight + 'px';
+    }
+
+    function enableWrappingFields() {
+      document.querySelectorAll(
+        '#zvlastni1Box textarea, #zvlastni2Box textarea, #vybaveniTable textarea, #pokladTable textarea'
+      ).forEach(autoGrowTextarea);
+    }
+
+    function refreshWrappingFields() {
+      enableWrappingFields();
+    }
+
     function init() {
       renderStatTable();
       renderTable('bojTable', [
@@ -1568,23 +2253,27 @@
 
       renderTable('strelbaTable', [
         { key: 'zbran', label: 'zbraň' },
+        { key: 'kde', label: 'kde' },
         { key: 'silaZbrane', label: 'síla zbraně' },
+        { key: 'dostrel', label: 'dostřel' },
         { key: 'uc', label: 'ÚČ' },
-        { key: 'utoc', label: 'útoč.' },
-        { key: 'maly', label: 'malý' },
-        { key: 'stred', label: 'střed.' },
-        { key: 'velky', label: 'velký' }
-      ], data.utocneCisloStrelba, 'utocneCisloStrelba', '1.5fr .8fr .45fr .45fr .5fr .5fr .5fr');
+        { key: 'utoc', label: 'útoč.' }
+      ], data.utocneCisloStrelba, 'utocneCisloStrelba', '1.6fr .7fr .8fr .8fr .45fr .45fr');
 
       renderTable('zbrojTable', [
         { key: 'zbroj', label: 'zbroj' },
         { key: 'sila', label: 'síla zbroje' }
-      ], data.zbroj, 'zbroj', '1.4fr 1fr');
+      ], data.zbroj, 'zbroj', '1fr 72px');
 
       renderTable('stitTable', [
         { key: 'stit', label: 'štít' },
         { key: 'sila', label: 'síla štítu' }
-      ], data.stit, 'stit', '1.4fr 1fr');
+      ], data.stit, 'stit', '1fr 72px');
+
+      renderTable('helmaTable', [
+        { key: 'helma', label: 'helma' },
+        { key: 'sila', label: 'síla helmy' }
+      ], data.helma, 'helma', '1fr 72px');
 
       renderLinesBox('zvlastni1Box', 'zvlastni1', 'zvláštní schopnosti, kouzla');
       renderLinesBox('zvlastni2Box', 'zvlastni2', 'zvláštní schopnosti, kouzla');
@@ -1599,12 +2288,14 @@
         { key: 'vaha', label: 'počet' }
       ], data.poklad, 'poklad', '1.5fr 1.1fr .75fr');
       renderSimpleTotals();
+      refreshWrappingFields();
       recalcCombatTables();
       recalcDefense();
       bindBasicFields();
       bindVitals();
       bindTabs();
       bindActions();
+      syncPrintSummary();
     }
 
     init();
