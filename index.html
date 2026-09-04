@@ -1613,6 +1613,30 @@
       }
     }
 
+  
+    .notes-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .notes-toggle {
+      padding: 4px 9px;
+      min-height: 28px;
+      font-size: 12px;
+    }
+
+    .notes-section.notes-collapsed #notesBody {
+      display: none !important;
+    }
+
+    @media print {
+      .notes-section.notes-collapsed {
+        display: none !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1833,9 +1857,14 @@
     </section>
 
     <section class="page page-2 hidden">
-      <div class="etable">
-        <div class="lines-head">poznámky</div>
-        <textarea id="poznamky"></textarea>
+      <div class="etable notes-section" id="notesSection">
+        <div class="lines-head notes-head">
+          <span>poznámky</span>
+          <button type="button" class="secondary notes-toggle print-hidden" id="toggleNotesBtn">Skrýt</button>
+        </div>
+        <div id="notesBody">
+          <textarea id="poznamky"></textarea>
+        </div>
       </div>
 
       <div class="page2-grid">
@@ -1899,6 +1928,7 @@
       helma: defaultRows(1, { helma: '', sila: '' }),
       zvlastni1: Array.from({ length: 9 }, () => ({ nazev: '', poznamka: '' })), zvlastni2: Array.from({ length: 9 }, () => ({ nazev: '', poznamka: '' })),
       poznamky: '',
+      poznamkySkryte: false,
       vybaveni: defaultRows(14, { vec: '', kde: '', vaha: '' }),
       zakladniNaklad: '', celkovyNaklad: '', nalozeni: 'zadne',
       poklad: defaultRows(12, { vec: '', kde: '', vaha: '' }),
@@ -2534,6 +2564,19 @@
     }
 
 
+    function syncNotesVisibility() {
+      const section = document.getElementById('notesSection');
+      const body = document.getElementById('notesBody');
+      const button = document.getElementById('toggleNotesBtn');
+      if (!section || !body || !button) return;
+
+      const hidden = Boolean(data.poznamkySkryte);
+      section.classList.toggle('notes-collapsed', hidden);
+      body.hidden = hidden;
+      button.textContent = hidden ? 'Zobrazit' : 'Skrýt';
+      button.setAttribute('aria-expanded', hidden ? 'false' : 'true');
+    }
+
     function resizeNotes() {
       const el = document.getElementById('poznamky');
       if (!el) return;
@@ -2564,6 +2607,17 @@
         });
         requestAnimationFrame(resizeNotes);
       }
+
+      const toggleNotesBtn = document.getElementById('toggleNotesBtn');
+      if (toggleNotesBtn) {
+        toggleNotesBtn.addEventListener('click', () => {
+          data.poznamkySkryte = !data.poznamkySkryte;
+          syncNotesVisibility();
+          if (!data.poznamkySkryte) requestAnimationFrame(resizeNotes);
+          scheduleSave();
+        });
+      }
+      syncNotesVisibility();
     }
 
 
